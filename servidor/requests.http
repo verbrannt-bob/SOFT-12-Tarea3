@@ -1,0 +1,88 @@
+# requests.http
+# Peticiones de prueba para la extensión REST Client de VS Code.
+ 
+@api = http://localhost:3000/api
+ 
+### 1. Una ruta que todavía no existe  →  404
+GET {{api}}/series
+ 
+### 2. La raíz del API  →  404
+GET {{api}}
+ 
+### 3. Un cuerpo con JSON mal escrito  →  400
+POST {{api}}/series
+Content-Type: application/json
+ 
+{ "titulo":}
+
+
+### 4. Listar miembros  →  200
+GET {{api}}/miembros
+
+### 5. Listar series  →  200
+GET {{api}}/series
+ 
+### 6. Crear una serie  →  201
+# Reemplace el miembroId por el _id de Sofía (petición 4)
+POST {{api}}/series
+Content-Type: application/json
+ 
+{
+  "titulo": "Severance",
+  "genero": "Drama",
+  "temporadas": 2,
+  "miembroId": "6aefab3142d6502572d9ca00"
+}
+ 
+### 7. Datos inválidos  →  400 con un mensaje por campo
+POST {{api}}/series
+Content-Type: application/json
+ 
+{
+  "titulo": "S",
+  "genero": "Terror",
+  "temporadas": "dos",
+  "miembroId": "123"
+}
+ 
+### 8. Un miembro que no existe  →  400
+POST {{api}}/series
+Content-Type: application/json
+ 
+{
+  "titulo": "Fargo",
+  "genero": "Drama",
+  "temporadas": 5,
+  "miembroId": "650000000000000000000000"
+}
+
+### 9. Cambiar el estado de una serie  →  200
+# Reemplace el id por el _id de Severance (respuesta de la petición 6)
+PATCH {{api}}/series/P6b0249fda9b14b5a22dcf058/estado
+Content-Type: application/json
+ 
+{ "estado": "Viendo" }
+ 
+### 10. Un estado que no existe  →  400
+PATCH {{api}}/series/6b0249fda9b14b5a22dcf058/estado
+Content-Type: application/json
+ 
+{ "estado": "Abandonada" }
+ 
+### 11. Un id mal formado  →  400
+PATCH {{api}}/series/abc/estado
+Content-Type: application/json
+ 
+{ "estado": "Vista" }
+ 
+### 12. Un id bien formado que no existe  →  404
+PATCH {{api}}/series/650000000000000000000000/estado
+Content-Type: application/json
+ 
+{ "estado": "Vista" }
+ 
+### 13. Eliminar una serie  →  204
+DELETE {{api}}/series/6b0249fda9b14b5a22dcf058
+ 
+### 14. Eliminarla otra vez  →  404
+DELETE {{api}}/series/6b0249fda9b14b5a22dcf058
