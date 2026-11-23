@@ -1,0 +1,13 @@
+# requests.http — servidor .NET
+# Las mismas peticiones 4 y 5 del servidor Express, ahora contra .NET.
+ 
+@api = http://localhost:5080/api
+ 
+### 1. Listar miembros  →  200
+GET {{api}}/miembros
+ 
+### 2. Listar series  →  200
+GET {{api}}/series
+ 
+### 3. Una ruta que no existe  →  404 (todavía sin el formato del contrato)
+GET {{api}}/plataformas
